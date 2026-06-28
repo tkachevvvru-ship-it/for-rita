@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Добрый интерактивный сайт-приключение для маленькой героини и её улыбки."
+    />
+    <title>Королевство Зубной Феи: миссия — спасти улыбку</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="ambient" aria-hidden="true">
+      <span class="cloud cloud-one"></span>
+      <span class="cloud cloud-two"></span>
+      <span class="cloud cloud-three"></span>
+      <span class="twinkle t1">✦</span>
+      <span class="twinkle t2">♡</span>
+      <span class="twinkle t3">✧</span>
+      <span class="twinkle t4">✦</span>
+      <span class="twinkle t5">♡</span>
+    </div>
+
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="К началу сайта">
+        <span class="brand-mark">🦷</span>
+        <span>Королевство Зубной Феи</span>
+      </a>
+      <nav class="top-nav" aria-label="Разделы сайта">
+        <a href="#story">Сказка</a>
+        <a href="#map">Карта</a>
+        <a href="#game">Игра</a>
+        <a href="#medal">Медаль</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero section reveal">
+        <div class="hero-copy">
+          <p class="eyebrow">Миссия — спасти улыбку</p>
+          <h1>Миссия: спасти самую милую улыбку</h1>
+          <p class="hero-subtitle">
+            Сегодня один маленький зубик загрустил, но рядом есть любовь,
+            забота и волшебство.
+          </p>
+          <div class="hero-actions" aria-label="Главные действия">
+            <button class="btn btn-primary" type="button" data-scroll="#map">
+              <span>Начать волшебную миссию</span>
+            </button>
+            <button class="btn btn-soft" type="button" id="kindWordsButton">
+              <span>Сказать добрые слова</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="hero-stage" aria-label="Фото маленькой героини">
+          <div class="photo-aura" aria-hidden="true"></div>
+          <div class="hero-photo-card">
+            <img
+              id="heroPhoto"
+              src="assets/sister.jpg"
+              alt="Маленькая героиня волшебной миссии"
+            />
+            <div class="photo-placeholder">Фото маленькой героини</div>
+          </div>
+          <div class="floating-badge badge-heart" aria-hidden="true">♡</div>
+          <div class="floating-badge badge-star" aria-hidden="true">✦</div>
+          <div class="floating-badge badge-cloud" aria-hidden="true">☁</div>
+          <div class="tooth tooth-hero happy" aria-hidden="true">
+            <span class="tooth-shine"></span>
+            <span class="eye left"></span>
+            <span class="eye right"></span>
+            <span class="cheek left"></span>
+            <span class="cheek right"></span>
+            <span class="mouth"></span>
+            <span class="arm left"></span>
+            <span class="arm right"></span>
+          </div>
+          <div class="fairy" aria-hidden="true">
+            <span class="wing wing-left"></span>
+            <span class="wing wing-right"></span>
+            <span class="fairy-face">✦</span>
+            <span class="wand">✧</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section story-section reveal" id="story">
+        <div class="section-heading">
+          <p class="eyebrow">Сказочная глава</p>
+          <h2>Сказка про маленький зубик</h2>
+        </div>
+        <div class="story-card glass-card">
+          <div class="story-illustration" id="storyIcon" aria-hidden="true">🦷</div>
+          <div class="story-content">
+            <p class="story-intro">
+              В одном добром королевстве жила самая светлая улыбка. Все
+              звёздочки любили её смех. Но однажды один зубик немного
+              загрустил. Тогда на помощь пришли Фея Улыбки, волшебные
+              сердечки и самый заботливый помощник.
+            </p>
+            <div class="story-step">
+              <span class="step-count" id="storyCount">Шаг 1 из 4</span>
+              <h3 id="storyTitle">Зубик загрустил</h3>
+              <p id="storyText">
+                Маленький зубик тихонько попросил: «Подари мне немного
+                заботы».
+              </p>
+            </div>
+            <div class="story-progress" aria-hidden="true">
+              <span class="active"></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <button class="btn btn-primary" type="button" id="nextStory">
+              Дальше
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section map-section reveal" id="map">
+        <div class="section-heading">
+          <p class="eyebrow">Пять добрых мест</p>
+          <h2>Карта волшебной миссии</h2>
+        </div>
+        <div class="mission-map" aria-label="Карта из пяти этапов">
+          <div class="map-path" aria-hidden="true"></div>
+          <button class="map-place glass-card" type="button" data-place="0">
+            <span class="place-icon">🏰</span>
+            <span class="place-title">Замок Улыбки</span>
+            <span class="place-desc">Здесь живёт самая добрая улыбка.</span>
+            <span class="place-secret">Твоя улыбка делает комнату светлее.</span>
+          </button>
+          <button class="map-place glass-card" type="button" data-place="1">
+            <span class="place-icon">☁️</span>
+            <span class="place-title">Облако Обнимашек</span>
+            <span class="place-desc">Здесь появляются мягкие сердечки поддержки.</span>
+            <span class="place-secret">Обнимашка рядом, даже когда зубик грустит.</span>
+          </button>
+          <button class="map-place glass-card" type="button" data-place="2">
+            <span class="place-icon">🪥</span>
+            <span class="place-title">Лес Щёточек</span>
+            <span class="place-desc">Здесь живут помощники чистых зубиков.</span>
+            <span class="place-secret">Мягкие помощники любят заботу и спокойствие.</span>
+          </button>
+          <button class="map-place glass-card" type="button" data-place="3">
+            <span class="place-icon">💧</span>
+            <span class="place-title">Озеро Воды</span>
+            <span class="place-desc">Здесь зубик отдыхает и становится спокойнее.</span>
+            <span class="place-secret">Капелька принесла зубику тихое сияние.</span>
+          </button>
+          <button class="map-place glass-card" type="button" data-place="4">
+            <span class="place-icon">⭐</span>
+            <span class="place-title">Башня Храбрости</span>
+            <span class="place-desc">Здесь маленькая героиня получает медаль.</span>
+            <span class="place-secret">Звёздочка уже знает, кто сегодня герой.</span>
+          </button>
+        </div>
+        <p class="mission-complete" id="mapComplete" role="status">
+          Миссия почти выполнена!
+        </p>
+      </section>
+
+      <section class="section game-section reveal" id="game">
+        <div class="section-heading">
+          <p class="eyebrow">Главная игра</p>
+          <h2>Поможем зубику улыбнуться</h2>
+        </div>
+        <div class="game-shell glass-card">
+          <div class="game-character">
+            <div class="tooth tooth-game sad" id="gameTooth" aria-label="Зубик грустит">
+              <span class="tooth-shine"></span>
+              <span class="eye left"></span>
+              <span class="eye right"></span>
+              <span class="cheek left"></span>
+              <span class="cheek right"></span>
+              <span class="mouth"></span>
+              <span class="arm left"></span>
+              <span class="arm right"></span>
+            </div>
+            <p class="game-status" id="gameStatus" role="status">
+              Зубик ждёт немного заботы.
+            </p>
+          </div>
+
+          <div class="game-controls">
+            <div class="mood-meter" aria-label="Шкала настроения зубика">
+              <div class="meter-label">
+                <span>Настроение зубика</span>
+                <strong id="moodValue">0%</strong>
+              </div>
+              <div class="meter-track">
+                <span id="moodFill"></span>
+              </div>
+            </div>
+
+            <div class="magic-items" aria-label="Волшебные предметы">
+              <button class="item-button" type="button" data-item="heart">
+                <span class="item-icon">❤️</span>
+                <span>Сердечко</span>
+              </button>
+              <button class="item-button" type="button" data-item="star">
+                <span class="item-icon">⭐</span>
+                <span>Звёздочка храбрости</span>
+              </button>
+              <button class="item-button" type="button" data-item="brush">
+                <span class="item-icon">🪥</span>
+                <span>Мягкая щёточка</span>
+              </button>
+              <button class="item-button" type="button" data-item="drop">
+                <span class="item-icon">💧</span>
+                <span>Капелька воды</span>
+              </button>
+              <button class="item-button" type="button" data-item="hug">
+                <span class="item-icon">🤗</span>
+                <span>Обнимашка</span>
+              </button>
+            </div>
+
+            <div class="game-finale" id="gameFinale">
+              <p>Ура! Зубик получил много заботы и любви!</p>
+              <button class="btn btn-primary" type="button" data-scroll="#medal">
+                Получить медаль храбрости
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section words-section reveal" id="words">
+        <div class="section-heading">
+          <p class="eyebrow">Тёплая поддержка</p>
+          <h2>Слова, которые помогают</h2>
+        </div>
+        <div class="support-grid">
+          <button class="support-card glass-card" type="button">Ты очень храбрая.</button>
+          <button class="support-card glass-card" type="button">Я рядом с тобой.</button>
+          <button class="support-card glass-card" type="button">Ты не одна.</button>
+          <button class="support-card glass-card" type="button">
+            Твоя улыбка самая волшебная.
+          </button>
+          <button class="support-card glass-card" type="button">
+            Зубик скоро получит помощь.
+          </button>
+          <button class="support-card glass-card" type="button">
+            Мы тебя очень любим.
+          </button>
+          <button class="support-card glass-card" type="button">
+            Ты маленькая героиня.
+          </button>
+          <button class="support-card glass-card" type="button">
+            Сегодня ты получаешь звёздочку смелости.
+          </button>
+        </div>
+        <div class="random-kind glass-card">
+          <p id="randomPhrase">Фея Улыбки рядом.</p>
+          <button class="btn btn-soft" type="button" id="moreKindness">
+            Ещё доброе слово
+          </button>
+        </div>
+      </section>
+
+      <section class="section medal-section reveal" id="medal">
+        <div class="section-heading">
+          <p class="eyebrow">Финал миссии</p>
+          <h2>Медаль самой храброй улыбки</h2>
+        </div>
+        <div class="medal-actions">
+          <button class="btn btn-primary" type="button" id="showMedal">
+            Показать медаль
+          </button>
+          <button class="btn btn-soft" type="button" id="printMedal">
+            Скачать сертификат
+          </button>
+          <button class="btn btn-soft" type="button" id="restartMission">
+            Начать миссию заново
+          </button>
+        </div>
+        <article class="certificate glass-card" id="certificate" aria-label="Сертификат храбрости">
+          <div class="ribbon">Медаль храбрости</div>
+          <div class="certificate-stars" aria-hidden="true">⭐ ✦ ⭐</div>
+          <div class="certificate-photo">
+            <img
+              src="assets/sister.jpg"
+              alt="Маленькая героиня на сертификате"
+              id="certificatePhoto"
+            />
+            <div class="photo-placeholder">Фото маленькой героини</div>
+          </div>
+          <h3>Самая храбрая маленькая героиня</h3>
+          <p>
+            Эта медаль выдаётся самой храброй маленькой героине за смелость,
+            терпение и самую милую улыбку.
+          </p>
+          <div class="medal-mark" aria-hidden="true">⭐</div>
+        </article>
+      </section>
+
+      <section class="section parents-note reveal" id="parents">
+        <div class="glass-card note-card">
+          <h2>Маленькая заметка для взрослых</h2>
+          <p>
+            Этот сайт создан для поддержки и отвлечения ребёнка. Если зубик
+            болит, важно рассказать взрослым и обратиться к детскому
+            стоматологу. Если боль сильная, есть отёк, температура или ребёнку
+            очень плохо — нужна срочная помощь.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Сделано с любовью для самой милой улыбки</p>
+      <span aria-hidden="true">♡ 🦷 ⭐</span>
+    </footer>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="sparkle-layer" id="sparkleLayer" aria-hidden="true"></div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
