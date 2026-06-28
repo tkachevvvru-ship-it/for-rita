@@ -32,6 +32,10 @@
         <a href="#story">Сказка</a>
         <a href="#map">Карта</a>
         <a href="#game">Игра</a>
+        <a href="#coloring">Раскраска</a>
+        <a href="#catch">Звёздочки</a>
+        <a href="#music">Музыка</a>
+        <a href="#build">Улыбка</a>
         <a href="#medal">Медаль</a>
       </nav>
     </header>
@@ -226,6 +230,133 @@
               <button class="btn btn-primary" type="button" data-scroll="#medal">
                 Получить медаль храбрости
               </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section coloring-section reveal" id="coloring">
+        <div class="section-heading">
+          <p class="eyebrow">Творчество</p>
+          <h2>Раскрась зубика</h2>
+        </div>
+        <div class="coloring-shell glass-card">
+          <div class="coloring-canvas-wrap">
+            <svg class="coloring-svg" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+              <path class="tooth-part" data-part="body" d="M100 20 C55 20 25 55 25 95 C25 130 45 155 60 170 L75 220 C78 230 90 230 93 220 L100 190 L107 220 C110 230 122 230 125 220 L140 170 C155 155 175 130 175 95 C175 55 145 20 100 20Z" />
+              <circle class="tooth-part" data-part="eye-l" cx="72" cy="90" r="14" />
+              <circle class="tooth-part" data-part="eye-r" cx="128" cy="90" r="14" />
+              <ellipse class="tooth-part" data-part="cheek-l" cx="55" cy="120" rx="12" ry="8" />
+              <ellipse class="tooth-part" data-part="cheek-r" cx="145" cy="120" rx="12" ry="8" />
+              <path class="tooth-part" data-part="mouth" d="M75 140 Q100 170 125 140" stroke-width="4" fill="none" />
+              <circle class="tooth-part" data-part="star-l" cx="35" cy="45" r="10" />
+              <circle class="tooth-part" data-part="star-r" cx="165" cy="45" r="10" />
+            </svg>
+          </div>
+          <div class="coloring-palette">
+            <h3>Палитра</h3>
+            <div class="palette-colors">
+              <button class="palette-color selected" type="button" data-color="#ff6eb8" style="background:#ff6eb8" aria-label="Розовый"></button>
+              <button class="palette-color" type="button" data-color="#ff9f5e" style="background:#ff9f5e" aria-label="Оранжевый"></button>
+              <button class="palette-color" type="button" data-color="#ffd55e" style="background:#ffd55e" aria-label="Жёлтый"></button>
+              <button class="palette-color" type="button" data-color="#5ee8a5" style="background:#5ee8a5" aria-label="Зелёный"></button>
+              <button class="palette-color" type="button" data-color="#5ec8ff" style="background:#5ec8ff" aria-label="Голубой"></button>
+              <button class="palette-color" type="button" data-color="#b88aff" style="background:#b88aff" aria-label="Фиолетовый"></button>
+              <button class="palette-color" type="button" data-color="#ff6b6b" style="background:#ff6b6b" aria-label="Красный"></button>
+              <button class="palette-color" type="button" data-color="#c4ff6b" style="background:#c4ff6b" aria-label="Лайм"></button>
+            </div>
+            <div class="coloring-actions">
+              <button class="btn btn-soft" type="button" id="coloringReset">Начать заново</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section catch-section reveal" id="catch">
+        <div class="section-heading">
+          <p class="eyebrow">Игра-ловилка</p>
+          <h2>Поймай звёздочки</h2>
+        </div>
+        <div class="catch-shell glass-card">
+          <div class="catch-stats">
+            <div>Поймано: <span id="catchScore">0</span></div>
+            <div>Время: <span id="catchTime">30</span> сек</div>
+          </div>
+          <div class="catch-field" id="catchField"></div>
+          <button class="btn btn-primary catch-start" type="button" id="catchStart">Начать игру</button>
+          <div class="catch-result" id="catchResult">
+            <p id="catchResultText"></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section music-section reveal" id="music">
+        <div class="section-heading">
+          <p class="eyebrow">Музыкальная радость</p>
+          <h2>Волшебные нотки</h2>
+        </div>
+        <div class="music-shell glass-card">
+          <div class="music-grid">
+            <button class="music-btn" type="button" data-note="C">🌸<span class="music-btn-label">Цветочек</span></button>
+            <button class="music-btn" type="button" data-note="D">🌞<span class="music-btn-label">Солнышко</span></button>
+            <button class="music-btn" type="button" data-note="E">⭐<span class="music-btn-label">Звёздочка</span></button>
+            <button class="music-btn" type="button" data-note="F">🦋<span class="music-btn-label">Бабочка</span></button>
+            <button class="music-btn" type="button" data-note="G">🌈<span class="music-btn-label">Радуга</span></button>
+            <button class="music-btn" type="button" data-note="A">💎<span class="music-btn-label">Бриллик</span></button>
+            <button class="music-btn" type="button" data-note="B">🎀<span class="music-btn-label">Бантик</span></button>
+            <button class="music-btn" type="button" data-note="C2">💖<span class="music-btn-label">Сердечко</span></button>
+          </div>
+          <p class="music-hint">Нажми на кнопочку и услышишь волшебную нотку!</p>
+        </div>
+      </section>
+
+      <section class="section build-section reveal" id="build">
+        <div class="section-heading">
+          <p class="eyebrow">Собери друга</p>
+          <h2>Собери улыбку</h2>
+        </div>
+        <div class="build-shell glass-card">
+          <div class="build-face-wrap">
+            <div class="build-tooth" id="buildTooth">
+              <div class="build-slot" data-slot="eye-left"></div>
+              <div class="build-slot" data-slot="eye-right"></div>
+              <div class="build-slot" data-slot="mouth"></div>
+              <div class="build-slot" data-slot="cheek-left"></div>
+              <div class="build-slot" data-slot="cheek-right"></div>
+            </div>
+            <div class="build-progress">
+              <span class="build-progress-dot"></span>
+              <span class="build-progress-dot"></span>
+              <span class="build-progress-dot"></span>
+              <span class="build-progress-dot"></span>
+              <span class="build-progress-dot"></span>
+            </div>
+          </div>
+          <div class="build-parts">
+            <h3>Детали</h3>
+            <div class="build-part" data-part="eye-left" draggable="true">
+              <span class="part-emoji">👀</span>
+              <span>Глазки</span>
+            </div>
+            <div class="build-part" data-part="eye-right" draggable="true">
+              <span class="part-emoji">👀</span>
+              <span>Глазки</span>
+            </div>
+            <div class="build-part" data-part="mouth" draggable="true">
+              <span class="part-emoji">👄</span>
+              <span>Ротик</span>
+            </div>
+            <div class="build-part" data-part="cheek-left" draggable="true">
+              <span class="part-emoji">🌸</span>
+              <span>Щёчка</span>
+            </div>
+            <div class="build-part" data-part="cheek-right" draggable="true">
+              <span class="part-emoji">🌸</span>
+              <span>Щёчка</span>
+            </div>
+            <button class="btn btn-soft" type="button" id="buildReset">Начать заново</button>
+            <div class="build-celebration" id="buildCelebration">
+              Ура! Улыбка собрана!
             </div>
           </div>
         </div>

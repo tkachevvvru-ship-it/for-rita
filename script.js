@@ -40,11 +40,40 @@ const supportPhrases = [
   "Ты очень храбрая. Я рядом с тобой.",
 ];
 
+const catchEmojis = ["⭐", "♡", "✦", "🌸", "🦋", "🍭", "🌈", "💎"];
+
+const musicNotes = [
+  { note: "C", freq: 523.25, emoji: "🌸", label: "Цветочек" },
+  { note: "D", freq: 587.33, emoji: "🌞", label: "Солнышко" },
+  { note: "E", freq: 659.25, emoji: "⭐", label: "Звёздочка" },
+  { note: "F", freq: 698.46, emoji: "🦋", label: "Бабочка" },
+  { note: "G", freq: 783.99, emoji: "🌈", label: "Радуга" },
+  { note: "A", freq: 880.00, emoji: "💎", label: "Бриллик" },
+  { note: "B", freq: 987.77, emoji: "🎀", label: "Бантик" },
+  { note: "C2", freq: 1046.50, emoji: "💖", label: "Сердечко" },
+];
+
+const buildParts = [
+  { id: "eye-left", emoji: "👀", label: "Глазки" },
+  { id: "eye-right", emoji: "👀", label: "Глазки" },
+  { id: "mouth", emoji: "👄", label: "Ротик" },
+  { id: "cheek-left", emoji: "🌸", label: "Щёчка" },
+  { id: "cheek-right", emoji: "🌸", label: "Щёчка" },
+];
+
+const coloringColors = [
+  "#ff6eb8", "#ff9f5e", "#ffd55e", "#5ee8a5",
+  "#5ec8ff", "#b88aff", "#ff6b6b", "#c4ff6b",
+];
+
 const state = {
   storyIndex: 0,
   openedPlaces: new Set(),
   mood: 0,
   usedItems: new Set(),
+  coloring: { color: "#ff6eb8" },
+  catch: { score: 0, active: false, timer: null, timeLeft: 30 },
+  build: { filled: new Set() },
 };
 
 const $ = (selector) => document.querySelector(selector);
@@ -90,10 +119,35 @@ function setupReveal() {
         }
       });
     },
-    { threshold: 0.14 }
+    { threshold: 0.1 }
   );
 
   $$(".reveal").forEach((section) => observer.observe(section));
+}
+
+function setupParallax() {
+  const clouds = $$(".cloud");
+  const twinkles = $$(".twinkle");
+  if (!clouds.length) return;
+
+  let ticking = false;
+  window.addEventListener("mousemove", (e) => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 2;
+      const y = (e.clientY / window.innerHeight - 0.5) * 2;
+      clouds.forEach((c, i) => {
+        const speed = (i + 1) * 8;
+        c.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+      });
+      twinkles.forEach((t, i) => {
+        const speed = (i + 1) * 4;
+        t.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+      });
+      ticking = false;
+    });
+  });
 }
 
 function setupScrollButtons() {
@@ -296,6 +350,7 @@ function setupMedal() {
     state.openedPlaces.clear();
     state.mood = 0;
     state.usedItems.clear();
+    state.build.filled.clear();
     updateStory();
     updateMood();
     $$(".map-place").forEach((place) => place.classList.remove("open"));
@@ -309,18 +364,383 @@ function setupMedal() {
     $("#gameStatus").textContent = "Зубик ждёт немного заботы.";
     $("#top").scrollIntoView({ behavior: "smooth", block: "start" });
     showToast("Миссия начинается снова!");
+    resetColoring();
+    resetCatch();
+    resetBuild();
   });
+}
+
+// ===== COLORING GAME =====
+function setupColoring() {
+  const paletteColors = $$(".palette-color");
+  paletteColors.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      paletteColors.forEach((b) => b.classList.remove("selected"));
+      btn.classList.add("selected");
+      state.coloring.color = btn.dataset.color;
+    });
+  });
+
+  $$(".coloring-svg .tooth-part").forEach((part) => {
+    part.addEventListener("click", () => {
+      part.style.fill = state.coloring.color;
+      part.classList.add("filled");
+      replayClass(part, "filled", 400);
+      createBurst(part, ["🎨", "✨", "⭐"], 8);
+    });
+  });
+
+  const resetBtn = $("#coloringReset");
+  if (resetBtn) {
+    resetBtn.addEventListener("click", resetColoring);
+  }
+}
+
+function resetColoring() {
+  $$(".coloring-svg .tooth-part").forEach((part) => {
+    part.style.fill = "#fff";
+    part.classList.remove("filled");
+  });
+}
+
+// ===== CATCH GAME =====
+function setupCatch() {
+  const startBtn = $("#catchStart");
+  if (!startBtn) return;
+
+  startBtn.addEventListener("click", startCatchGame);
+
+  const field = $("#catchField");
+  if (field) {
+    field.addEventListener("click", (e) => {
+      const item = e.target.closest(".catch-item");
+      if (!item || item.classList.contains("caught")) return;
+      catchItem(item);
+    });
+    field.addEventListener("touchstart", (e) => {
+      const item = e.target.closest(".catch-item");
+      if (!item || item.classList.contains("caught")) return;
+      e.preventDefault();
+      catchItem(item);
+    }, { passive: false });
+  }
+}
+
+function startCatchGame() {
+  state.catch.score = 0;
+  state.catch.active = true;
+  state.catch.timeLeft = 30;
+
+  const scoreEl = $("#catchScore");
+  const timeEl = $("#catchTime");
+  const resultEl = $("#catchResult");
+  const startBtn = $("#catchStart");
+
+  if (scoreEl) scoreEl.textContent = "0";
+  if (timeEl) timeEl.textContent = "30";
+  if (resultEl) resultEl.classList.remove("show");
+  if (startBtn) startBtn.disabled = true;
+
+  const field = $("#catchField");
+  if (field) field.innerHTML = "";
+
+  spawnCatchItems();
+
+  state.catch.timer = setInterval(() => {
+    state.catch.timeLeft--;
+    if (timeEl) timeEl.textContent = state.catch.timeLeft;
+
+    if (state.catch.timeLeft <= 0) {
+      endCatchGame();
+    }
+  }, 1000);
+}
+
+function spawnCatchItems() {
+  if (!state.catch.active) return;
+
+  const field = $("#catchField");
+  if (!field) return;
+
+  const item = document.createElement("span");
+  item.className = "catch-item";
+  item.textContent = catchEmojis[Math.floor(Math.random() * catchEmojis.length)];
+  item.style.left = `${10 + Math.random() * 80}%`;
+  item.style.animationDuration = `${2.5 + Math.random() * 2}s`;
+  item.style.fontSize = `${28 + Math.random() * 20}px`;
+
+  field.appendChild(item);
+  item.addEventListener("animationend", () => item.remove());
+
+  if (state.catch.active) {
+    setTimeout(spawnCatchItems, 400 + Math.random() * 600);
+  }
+}
+
+function catchItem(item) {
+  item.classList.add("caught");
+  state.catch.score++;
+  const scoreEl = $("#catchScore");
+  if (scoreEl) scoreEl.textContent = state.catch.score;
+
+  createBurst(item, ["⭐", "✨", "💖"], 6);
+
+  setTimeout(() => item.remove(), 300);
+}
+
+function endCatchGame() {
+  state.catch.active = false;
+  clearInterval(state.catch.timer);
+
+  const startBtn = $("#catchStart");
+  const resultEl = $("#catchResult");
+  const resultText = $("#catchResultText");
+
+  if (startBtn) startBtn.disabled = false;
+
+  const score = state.catch.score;
+  let msg;
+  if (score >= 25) msg = `Ух ты! ${score} звёздочек! Ты настоящая волшебница! 🌟`;
+  else if (score >= 15) msg = `${score} звёздочек! Какая ловкая ручка! ⭐`;
+  else if (score >= 8) msg = `${score} звёздочек! Молодец! ✨`;
+  else msg = `${score} звёздочек! Попробуй ещё раз! 💪`;
+
+  if (resultText) resultText.textContent = msg;
+  if (resultEl) resultEl.classList.add("show");
+  showToast(msg);
+  createSparkles(30);
+}
+
+function resetCatch() {
+  state.catch.active = false;
+  state.catch.score = 0;
+  state.catch.timeLeft = 30;
+  clearInterval(state.catch.timer);
+
+  const scoreEl = $("#catchScore");
+  const timeEl = $("#catchTime");
+  const resultEl = $("#catchResult");
+
+  if (scoreEl) scoreEl.textContent = "0";
+  if (timeEl) timeEl.textContent = "30";
+  if (resultEl) resultEl.classList.remove("show");
+
+  const field = $("#catchField");
+  if (field) field.innerHTML = "";
+}
+
+// ===== MUSIC GAME =====
+let audioCtx = null;
+
+function getAudioContext() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  return audioCtx;
+}
+
+function playNote(freq, duration = 0.4) {
+  const ctx = getAudioContext();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc.type = "sine";
+  osc.frequency.setValueAtTime(freq, ctx.currentTime);
+
+  gain.gain.setValueAtTime(0.3, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc.start(ctx.currentTime);
+  osc.stop(ctx.currentTime + duration);
+}
+
+function setupMusic() {
+  $$(".music-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const noteData = musicNotes.find((n) => n.note === btn.dataset.note);
+      if (!noteData) return;
+
+      playNote(noteData.freq);
+      replayClass(btn, "playing", 500);
+      createBurst(btn, ["🎵", "🎶", "✨", noteData.emoji], 10);
+      showToast(`${noteData.emoji} ${noteData.label}!`);
+    });
+
+    btn.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      btn.click();
+    }, { passive: false });
+  });
+}
+
+// ===== BUILD SMILE GAME =====
+function setupBuild() {
+  let draggedPart = null;
+
+  $$(".build-part").forEach((part) => {
+    part.addEventListener("click", () => {
+      if (part.classList.contains("used")) return;
+      selectBuildPart(part);
+    });
+
+    part.addEventListener("dragstart", (e) => {
+      if (part.classList.contains("used")) return;
+      draggedPart = part;
+      part.classList.add("dragging");
+      e.dataTransfer.setData("text/plain", part.dataset.part);
+    });
+
+    part.addEventListener("dragend", () => {
+      part.classList.remove("dragging");
+      draggedPart = null;
+    });
+
+    part.addEventListener("touchstart", (e) => {
+      if (part.classList.contains("used")) return;
+      e.preventDefault();
+      selectBuildPart(part);
+    }, { passive: false });
+  });
+
+  $$(".build-slot").forEach((slot) => {
+    slot.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      if (!slot.classList.contains("filled")) {
+        slot.classList.add("highlight");
+      }
+    });
+
+    slot.addEventListener("dragleave", () => {
+      slot.classList.remove("highlight");
+    });
+
+    slot.addEventListener("drop", (e) => {
+      e.preventDefault();
+      slot.classList.remove("highlight");
+      const partId = e.dataTransfer.getData("text/plain");
+      if (partId === slot.dataset.slot && !slot.classList.contains("filled")) {
+        fillBuildSlot(slot, partId);
+      }
+    });
+
+    slot.addEventListener("click", () => {
+      if (slot.classList.contains("filled")) return;
+      if (draggedPart) {
+        const partId = draggedPart.dataset.part;
+        if (partId === slot.dataset.slot) {
+          fillBuildSlot(slot, partId);
+          draggedPart.classList.add("used");
+          draggedPart = null;
+        }
+      }
+    });
+  });
+
+  const resetBtn = $("#buildReset");
+  if (resetBtn) {
+    resetBtn.addEventListener("click", resetBuild);
+  }
+}
+
+let selectedBuildPart = null;
+
+function selectBuildPart(part) {
+  $$(".build-part").forEach((p) => p.classList.remove("selected"));
+  part.classList.add("selected");
+  selectedBuildPart = part;
+
+  const partId = part.dataset.part;
+  $$(`.build-slot[data-slot="${partId}"]`).forEach((slot) => {
+    if (!slot.classList.contains("filled")) {
+      slot.classList.add("highlight");
+    }
+  });
+
+  setTimeout(() => {
+    $$(".build-slot").forEach((s) => s.classList.remove("highlight"));
+  }, 2000);
+
+  const slot = $(`.build-slot[data-slot="${partId}"]`);
+  if (slot && !slot.classList.contains("filled")) {
+    fillBuildSlot(slot, partId);
+    part.classList.add("used");
+    selectedBuildPart = null;
+  }
+}
+
+function fillBuildSlot(slot, partId) {
+  slot.classList.add("filled");
+  slot.classList.remove("highlight");
+
+  const partData = buildParts.find((p) => p.id === partId);
+  if (partData) {
+    slot.innerHTML = `<span class="slot-emoji">${partData.emoji}</span>`;
+  }
+
+  state.build.filled.add(partId);
+  replayClass(slot, "filled", 400);
+  createBurst(slot, ["✨", "⭐", "💖"], 8);
+
+  updateBuildProgress();
+
+  if (state.build.filled.size === buildParts.length) {
+    setTimeout(() => {
+      const celebration = $("#buildCelebration");
+      if (celebration) celebration.classList.add("show");
+      showToast("Ура! Улыбка собрана! 🎉");
+      createSparkles(60);
+    }, 400);
+  }
+}
+
+function updateBuildProgress() {
+  $$(".build-progress-dot").forEach((dot, i) => {
+    if (i < state.build.filled.size) {
+      dot.classList.add("filled");
+    } else {
+      dot.classList.remove("filled");
+    }
+  });
+}
+
+function resetBuild() {
+  state.build.filled.clear();
+  selectedBuildPart = null;
+
+  $$(".build-slot").forEach((slot) => {
+    slot.classList.remove("filled", "highlight");
+    slot.innerHTML = "";
+  });
+
+  $$(".build-part").forEach((part) => {
+    part.classList.remove("used", "selected", "dragging");
+  });
+
+  $$(".build-progress-dot").forEach((dot) => {
+    dot.classList.remove("filled");
+  });
+
+  const celebration = $("#buildCelebration");
+  if (celebration) celebration.classList.remove("show");
 }
 
 function boot() {
   setupPhotoFallback();
   setupReveal();
+  setupParallax();
   setupScrollButtons();
   setupStory();
   setupMap();
   setupGame();
   setupSupportWords();
   setupMedal();
+  setupColoring();
+  setupCatch();
+  setupMusic();
+  setupBuild();
   updateStory();
   updateMood();
 }
