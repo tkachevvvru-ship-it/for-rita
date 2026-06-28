@@ -62,6 +62,14 @@ function showToast(message) {
   }, 2600);
 }
 
+function replayClass(element, className, duration = 700) {
+  if (!element) return;
+  element.classList.remove(className);
+  void element.offsetWidth;
+  element.classList.add(className);
+  window.setTimeout(() => element.classList.remove(className), duration);
+}
+
 function setupPhotoFallback() {
   ["#heroPhoto", "#certificatePhoto"].forEach((selector) => {
     const image = $(selector);
@@ -130,14 +138,17 @@ function setupMap() {
     place.addEventListener("click", () => {
       const placeId = place.dataset.place;
       place.classList.add("open");
+      replayClass(place, "pressed", 580);
       state.openedPlaces.add(placeId);
 
       const secret = place.querySelector(".place-secret");
       if (secret) showToast(secret.textContent);
+      createBurst(place, ["✦", "⭐", "♡", "✧"], 18);
+      createLocalHeart(place);
 
       if (state.openedPlaces.size === 5) {
         $("#mapComplete").classList.add("show");
-        createSparkles(34);
+        createSparkles(50);
       }
     });
   });
@@ -170,16 +181,23 @@ function setupGame() {
 
       state.usedItems.add(item);
       state.mood = Math.min(100, state.mood + 20);
+      button.classList.add("used");
+      replayClass(button, "item-pop", 640);
+      replayClass($("#gameTooth"), "care-pop", 640);
+      replayClass($(".game-shell"), "magic-active", 700);
+      replayClass($("#moodFill"), "meter-pop", 580);
       button.disabled = true;
       updateMood();
       showToast(gamePhrases[index % gamePhrases.length]);
       $("#gameStatus").textContent = gamePhrases[index % gamePhrases.length];
       createLocalHeart(button);
+      createBurst(button, ["♡", "⭐", "✦", "💧"], 18);
 
       if (state.mood === 100) {
         $("#gameStatus").textContent = "Ура! Зубик получил много заботы и любви!";
         $("#gameFinale").classList.add("show");
-        createSparkles(70);
+        createBurst($("#gameTooth"), ["⭐", "♡", "✦", "✨"], 34);
+        createSparkles(90);
       }
     });
   });
@@ -209,13 +227,40 @@ function createLocalHeart(source) {
   heart.addEventListener("animationend", () => heart.remove());
 }
 
+function createBurst(source, icons = ["✦", "♡", "⭐"], amount = 14) {
+  const rect = source.getBoundingClientRect();
+  const centerX = rect.left + rect.width / 2;
+  const centerY = rect.top + rect.height / 2;
+
+  for (let index = 0; index < amount; index += 1) {
+    const particle = document.createElement("span");
+    const angle = (Math.PI * 2 * index) / amount + Math.random() * 0.45;
+    const distance = 48 + Math.random() * 58;
+
+    particle.className = "burst-particle";
+    particle.textContent = icons[index % icons.length];
+    particle.style.setProperty("--x", `${centerX}px`);
+    particle.style.setProperty("--y", `${centerY}px`);
+    particle.style.setProperty("--dx", `${Math.cos(angle) * distance}px`);
+    particle.style.setProperty("--dy", `${Math.sin(angle) * distance}px`);
+    particle.style.setProperty("--spin", `${Math.random() * 260 - 130}deg`);
+    particle.style.setProperty("--size", `${18 + Math.random() * 16}px`);
+
+    document.body.appendChild(particle);
+    particle.addEventListener("animationend", () => particle.remove());
+  }
+}
+
 function setupSupportWords() {
   $$(".support-card").forEach((card) => {
     card.addEventListener("click", () => {
       $$(".support-card").forEach((otherCard) => otherCard.classList.remove("active"));
       card.classList.add("active");
+      replayClass(card, "celebrate", 780);
       showToast(card.textContent.trim());
       createLocalHeart(card);
+      createBurst(card, ["♡", "💖", "✦", "⭐"], 22);
+      createSparkles(18);
     });
   });
 
@@ -223,7 +268,9 @@ function setupSupportWords() {
     const phrase = supportPhrases[Math.floor(Math.random() * supportPhrases.length)];
     $("#randomPhrase").textContent = phrase;
     showToast(phrase);
-    createSparkles(12);
+    replayClass($(".random-kind"), "celebrate", 780);
+    createBurst($("#moreKindness"), ["♡", "💖", "✦", "⭐"], 24);
+    createSparkles(34);
   });
 
   $("#kindWordsButton").addEventListener("click", () => {
@@ -254,6 +301,7 @@ function setupMedal() {
     $$(".map-place").forEach((place) => place.classList.remove("open"));
     $$(".item-button").forEach((button) => {
       button.disabled = false;
+      button.classList.remove("used", "item-pop");
     });
     $("#mapComplete").classList.remove("show");
     $("#gameFinale").classList.remove("show");
