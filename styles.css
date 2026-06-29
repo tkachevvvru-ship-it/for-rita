@@ -2035,12 +2035,12 @@ h3 {
 
 .build-slot {
   position: absolute;
+  z-index: 2;
   display: grid;
   place-items: center;
   border: 2.5px dashed rgba(115, 95, 134, 0.2);
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(4px);
   transition: border-color 300ms ease, background 300ms ease, box-shadow 300ms ease, transform 300ms ease;
 }
 
@@ -2057,11 +2057,11 @@ h3 {
   animation: bounce3 600ms ease infinite;
 }
 
-.build-slot[data-slot="eye-left"] { left: 42px; top: 82px; width: 40px; height: 40px; }
-.build-slot[data-slot="eye-right"] { right: 42px; top: 82px; width: 40px; height: 40px; }
-.build-slot[data-slot="mouth"] { left: 50%; top: 148px; width: 66px; height: 40px; transform: translateX(-50%); border-radius: 0 0 999px 999px; }
-.build-slot[data-slot="cheek-left"] { left: 16px; top: 128px; width: 34px; height: 24px; border-radius: 50%; }
-.build-slot[data-slot="cheek-right"] { right: 16px; top: 128px; width: 34px; height: 24px; border-radius: 50%; }
+.build-slot[data-slot="eye-left"] { left: 46px; top: 64px; width: 40px; height: 40px; }
+.build-slot[data-slot="eye-right"] { right: 46px; top: 64px; width: 40px; height: 40px; }
+.build-slot[data-slot="mouth"] { left: 50%; top: 126px; width: 66px; height: 40px; transform: translateX(-50%); border-radius: 0 0 999px 999px; z-index: 3; }
+.build-slot[data-slot="cheek-left"] { left: 18px; top: 108px; width: 34px; height: 24px; border-radius: 50%; }
+.build-slot[data-slot="cheek-right"] { right: 18px; top: 108px; width: 34px; height: 24px; border-radius: 50%; }
 
 .build-slot .slot-emoji {
   font-size: 30px;
@@ -2820,11 +2820,11 @@ h3 {
     height: 155px;
   }
 
-  .build-slot[data-slot="eye-left"] { left: 28px; top: 55px; width: 26px; height: 26px; }
-  .build-slot[data-slot="eye-right"] { right: 28px; top: 55px; width: 26px; height: 26px; }
-  .build-slot[data-slot="mouth"] { top: 95px; width: 44px; height: 26px; }
-  .build-slot[data-slot="cheek-left"] { left: 12px; top: 82px; width: 22px; height: 16px; }
-  .build-slot[data-slot="cheek-right"] { right: 12px; top: 82px; width: 22px; height: 16px; }
+  .build-slot[data-slot="eye-left"] { left: 29px; top: 41px; width: 26px; height: 26px; }
+  .build-slot[data-slot="eye-right"] { right: 29px; top: 41px; width: 26px; height: 26px; }
+  .build-slot[data-slot="mouth"] { top: 80px; width: 44px; height: 26px; }
+  .build-slot[data-slot="cheek-left"] { left: 12px; top: 68px; width: 22px; height: 16px; }
+  .build-slot[data-slot="cheek-right"] { right: 12px; top: 68px; width: 22px; height: 16px; }
 
   .build-slot .slot-emoji {
     font-size: 20px;

@@ -54,8 +54,8 @@ const musicNotes = [
 ];
 
 const buildParts = [
-  { id: "eye-left", emoji: "👀", label: "Глазки" },
-  { id: "eye-right", emoji: "👀", label: "Глазки" },
+  { id: "eye-left", emoji: "👁️", label: "Глазки" },
+  { id: "eye-right", emoji: "👁️", label: "Глазки" },
   { id: "mouth", emoji: "👄", label: "Ротик" },
   { id: "cheek-left", emoji: "🌸", label: "Щёчка" },
   { id: "cheek-right", emoji: "🌸", label: "Щёчка" },
