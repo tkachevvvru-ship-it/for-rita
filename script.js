@@ -694,6 +694,8 @@ function fillBuildSlot(slot, partId) {
 
   if (state.build.filled.size === buildParts.length) {
     setTimeout(() => {
+      const tooth = $("#buildTooth");
+      if (tooth) tooth.classList.add("complete");
       const celebration = $("#buildCelebration");
       if (celebration) celebration.classList.add("show");
       showToast("Ура! Улыбка собрана! 🎉");
@@ -715,6 +717,9 @@ function updateBuildProgress() {
 function resetBuild() {
   state.build.filled.clear();
   selectedBuildPart = null;
+
+  const tooth = $("#buildTooth");
+  if (tooth) tooth.classList.remove("complete");
 
   $$(".build-slot").forEach((slot) => {
     slot.classList.remove("filled", "highlight");

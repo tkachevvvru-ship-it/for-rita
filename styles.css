@@ -1976,8 +1976,8 @@ h3 {
   position: relative;
   display: grid;
   place-items: center;
-  min-height: 420px;
-  padding: 24px;
+  min-height: 460px;
+  padding: 32px;
   border-radius: var(--radius-lg);
   background:
     radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.84), transparent 33%),
@@ -1986,60 +1986,87 @@ h3 {
 
 .build-tooth {
   position: relative;
-  width: 200px;
-  height: 230px;
-  border-radius: 48% 48% 38% 38% / 38% 38% 42% 42%;
-  background: linear-gradient(145deg, #ffffff 0%, #fff8fe 48%, #eaf7ff 100%);
+  width: 220px;
+  height: 240px;
+  border-radius: 50% 50% 44% 44% / 42% 42% 50% 50%;
+  background:
+    radial-gradient(circle at 38% 30%, rgba(255, 255, 255, 1) 0%, transparent 40%),
+    radial-gradient(circle at 65% 70%, rgba(234, 247, 255, 0.6), transparent 50%),
+    linear-gradient(160deg, #ffffff 0%, #fef8ff 35%, #f0f7ff 65%, #e8f4ff 100%);
   box-shadow:
-    inset -12px -18px 30px rgba(124, 207, 255, 0.18),
-    inset 10px 12px 18px rgba(255, 255, 255, 0.95),
-    0 28px 52px rgba(99, 72, 134, 0.22);
+    inset -14px -20px 36px rgba(124, 207, 255, 0.2),
+    inset 12px 14px 24px rgba(255, 255, 255, 1),
+    inset 0 0 60px rgba(255, 255, 255, 0.5),
+    0 30px 60px rgba(99, 72, 134, 0.2),
+    0 0 40px rgba(255, 143, 199, 0.1);
+  animation: buildToothGlow 3s ease-in-out infinite;
 }
 
 .build-tooth::before,
 .build-tooth::after {
   position: absolute;
-  bottom: -16px;
-  width: 68px;
-  height: 62px;
-  border-radius: 0 0 28px 28px;
+  bottom: -22px;
+  width: 72px;
+  height: 68px;
+  border-radius: 0 0 32px 32px;
   content: "";
-  background: inherit;
-  box-shadow: inset -8px -12px 18px rgba(124, 207, 255, 0.12);
+  background:
+    radial-gradient(circle at 40% 20%, rgba(255, 255, 255, 0.9), transparent 50%),
+    linear-gradient(160deg, #ffffff, #f0f7ff);
+  box-shadow:
+    inset -10px -14px 22px rgba(124, 207, 255, 0.16),
+    inset 6px 8px 14px rgba(255, 255, 255, 0.9),
+    0 12px 24px rgba(99, 72, 134, 0.1);
 }
 
-.build-tooth::before { left: 26px; transform: rotate(5deg); }
-.build-tooth::after { right: 26px; transform: rotate(-5deg); }
+.build-tooth::before { left: 28px; transform: rotate(4deg); }
+.build-tooth::after { right: 28px; transform: rotate(-4deg); }
+
+.build-tooth.complete {
+  animation: buildToothHappy 1.2s ease-in-out infinite, buildToothGlow 3s ease-in-out infinite;
+  box-shadow:
+    inset -14px -20px 36px rgba(124, 207, 255, 0.2),
+    inset 12px 14px 24px rgba(255, 255, 255, 1),
+    inset 0 0 60px rgba(255, 255, 255, 0.5),
+    0 30px 60px rgba(99, 72, 134, 0.2),
+    0 0 60px rgba(255, 143, 199, 0.25),
+    0 0 80px rgba(184, 138, 255, 0.15);
+}
 
 .build-slot {
   position: absolute;
   display: grid;
   place-items: center;
-  border: 3px dashed rgba(115, 95, 134, 0.25);
+  border: 2.5px dashed rgba(115, 95, 134, 0.2);
   border-radius: 50%;
-  transition: border-color 300ms ease, background 300ms ease;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(4px);
+  transition: border-color 300ms ease, background 300ms ease, box-shadow 300ms ease, transform 300ms ease;
 }
 
 .build-slot.filled {
   border-color: transparent;
   background: none;
+  backdrop-filter: none;
 }
 
 .build-slot.highlight {
   border-color: var(--pink);
-  background: rgba(255, 110, 184, 0.1);
+  background: rgba(255, 110, 184, 0.12);
+  box-shadow: 0 0 20px rgba(255, 110, 184, 0.2);
   animation: bounce3 600ms ease infinite;
 }
 
-.build-slot[data-slot="eye-left"] { left: 40px; top: 80px; width: 36px; height: 36px; }
-.build-slot[data-slot="eye-right"] { right: 40px; top: 80px; width: 36px; height: 36px; }
-.build-slot[data-slot="mouth"] { left: 50%; top: 140px; width: 60px; height: 36px; transform: translateX(-50%); border-radius: 0 0 999px 999px; }
-.build-slot[data-slot="cheek-left"] { left: 18px; top: 120px; width: 30px; height: 20px; border-radius: 50%; }
-.build-slot[data-slot="cheek-right"] { right: 18px; top: 120px; width: 30px; height: 20px; border-radius: 50%; }
+.build-slot[data-slot="eye-left"] { left: 42px; top: 82px; width: 40px; height: 40px; }
+.build-slot[data-slot="eye-right"] { right: 42px; top: 82px; width: 40px; height: 40px; }
+.build-slot[data-slot="mouth"] { left: 50%; top: 148px; width: 66px; height: 40px; transform: translateX(-50%); border-radius: 0 0 999px 999px; }
+.build-slot[data-slot="cheek-left"] { left: 16px; top: 128px; width: 34px; height: 24px; border-radius: 50%; }
+.build-slot[data-slot="cheek-right"] { right: 16px; top: 128px; width: 34px; height: 24px; border-radius: 50%; }
 
 .build-slot .slot-emoji {
-  font-size: 28px;
-  animation: slideUp 400ms ease both;
+  font-size: 30px;
+  animation: slotPlace 500ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  filter: drop-shadow(0 2px 6px rgba(99, 72, 134, 0.2));
 }
 
 .build-parts {
@@ -2063,33 +2090,40 @@ h3 {
   padding: 14px 18px;
   border: 2px solid rgba(255, 255, 255, 0.7);
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.6);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.7), rgba(255, 240, 247, 0.5));
   cursor: grab;
   font-size: 18px;
   font-weight: 900;
-  transition: transform 180ms ease, box-shadow 180ms ease, opacity 300ms ease;
+  transition: transform 200ms ease, box-shadow 200ms ease, opacity 300ms ease, border-color 200ms ease;
   user-select: none;
   -webkit-user-select: none;
+  box-shadow: 0 4px 14px rgba(123, 84, 150, 0.08);
 }
 
 .build-part:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 24px rgba(123, 84, 150, 0.15);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 28px rgba(123, 84, 150, 0.16);
+  border-color: rgba(255, 143, 199, 0.5);
 }
 
 .build-part.dragging {
-  opacity: 0.6;
-  transform: scale(1.05);
+  opacity: 0.5;
+  transform: scale(1.08);
+  box-shadow: 0 16px 36px rgba(123, 84, 150, 0.2);
 }
 
 .build-part.used {
-  opacity: 0.4;
+  opacity: 0.35;
   cursor: default;
   transform: none;
+  background: rgba(255, 250, 242, 0.5);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: none;
 }
 
 .build-part .part-emoji {
   font-size: 32px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
 .build-celebration {
@@ -2127,6 +2161,38 @@ h3 {
 .build-progress-dot.filled {
   background: linear-gradient(135deg, var(--pink), var(--lilac));
   transform: scale(1.2);
+}
+
+@keyframes buildToothGlow {
+  0%, 100% {
+    box-shadow:
+      inset -14px -20px 36px rgba(124, 207, 255, 0.2),
+      inset 12px 14px 24px rgba(255, 255, 255, 1),
+      inset 0 0 60px rgba(255, 255, 255, 0.5),
+      0 30px 60px rgba(99, 72, 134, 0.2),
+      0 0 40px rgba(255, 143, 199, 0.1);
+  }
+  50% {
+    box-shadow:
+      inset -14px -20px 36px rgba(124, 207, 255, 0.2),
+      inset 12px 14px 24px rgba(255, 255, 255, 1),
+      inset 0 0 60px rgba(255, 255, 255, 0.5),
+      0 30px 60px rgba(99, 72, 134, 0.2),
+      0 0 55px rgba(255, 143, 199, 0.18),
+      0 0 80px rgba(184, 138, 255, 0.08);
+  }
+}
+
+@keyframes buildToothHappy {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-6px) rotate(-2deg); }
+  75% { transform: translateY(-6px) rotate(2deg); }
+}
+
+@keyframes slotPlace {
+  0% { transform: scale(0.3); opacity: 0; }
+  60% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
 /* ===== Memory Game ===== */
@@ -2745,23 +2811,23 @@ h3 {
   }
 
   .build-face-wrap {
-    min-height: 200px;
+    min-height: 220px;
     padding: 12px;
   }
 
   .build-tooth {
-    width: 130px;
-    height: 150px;
+    width: 140px;
+    height: 155px;
   }
 
-  .build-slot[data-slot="eye-left"] { left: 26px; top: 52px; width: 24px; height: 24px; }
-  .build-slot[data-slot="eye-right"] { right: 26px; top: 52px; width: 24px; height: 24px; }
-  .build-slot[data-slot="mouth"] { top: 90px; width: 40px; height: 24px; }
-  .build-slot[data-slot="cheek-left"] { left: 12px; top: 78px; width: 20px; height: 14px; }
-  .build-slot[data-slot="cheek-right"] { right: 12px; top: 78px; width: 20px; height: 14px; }
+  .build-slot[data-slot="eye-left"] { left: 28px; top: 55px; width: 26px; height: 26px; }
+  .build-slot[data-slot="eye-right"] { right: 28px; top: 55px; width: 26px; height: 26px; }
+  .build-slot[data-slot="mouth"] { top: 95px; width: 44px; height: 26px; }
+  .build-slot[data-slot="cheek-left"] { left: 12px; top: 82px; width: 22px; height: 16px; }
+  .build-slot[data-slot="cheek-right"] { right: 12px; top: 82px; width: 22px; height: 16px; }
 
   .build-slot .slot-emoji {
-    font-size: 18px;
+    font-size: 20px;
   }
 
   .build-parts {
