@@ -36,6 +36,7 @@
         <a href="#catch">Звёздочки</a>
         <a href="#music">Музыка</a>
         <a href="#build">Улыбка</a>
+        <a href="#memory">Парочки</a>
         <a href="#medal">Медаль</a>
       </nav>
     </header>
@@ -392,6 +393,25 @@
           <button class="btn btn-soft" type="button" id="moreKindness">
             Ещё доброе слово
           </button>
+        </div>
+      </section>
+
+      <section class="section memory-section reveal" id="memory">
+        <div class="section-heading">
+          <p class="eyebrow">Игра на память</p>
+          <h2>Найди парочки</h2>
+        </div>
+        <div class="memory-shell glass-card">
+          <div class="memory-stats">
+            <div>Ходов: <span id="memoryMoves">0</span></div>
+            <div>Пар: <span id="memoryPairs">0</span> из <span id="memoryTotal">8</span></div>
+          </div>
+          <div class="memory-grid" id="memoryGrid"></div>
+          <button class="btn btn-soft" type="button" id="memoryRestart">Начать заново</button>
+          <div class="memory-win" id="memoryWin">
+            <p>Ура! Все парочки найдены!</p>
+            <span class="memory-win-stars">⭐ 🌟 ⭐</span>
+          </div>
         </div>
       </section>
 

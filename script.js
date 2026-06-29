@@ -74,10 +74,13 @@ const state = {
   coloring: { color: "#ff6eb8" },
   catch: { score: 0, active: false, timer: null, timeLeft: 30 },
   build: { filled: new Set() },
+  memory: { flipped: [], matched: new Set(), moves: 0, locked: false },
 };
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+const isMobile = () => window.innerWidth <= 640;
+const mobileScale = (n) => isMobile() ? Math.max(3, Math.floor(n * 0.3)) : n;
 
 const toast = $("#toast");
 const sparkleLayer = $("#sparkleLayer");
@@ -258,7 +261,8 @@ function setupGame() {
 }
 
 function createSparkles(amount) {
-  for (let index = 0; index < amount; index += 1) {
+  const count = mobileScale(amount);
+  for (let index = 0; index < count; index += 1) {
     const sparkle = document.createElement("span");
     sparkle.className = "falling-sparkle";
     sparkle.textContent = index % 3 === 0 ? "⭐" : index % 3 === 1 ? "✦" : "♡";
@@ -282,11 +286,12 @@ function createLocalHeart(source) {
 }
 
 function createBurst(source, icons = ["✦", "♡", "⭐"], amount = 14) {
+  const count = mobileScale(amount);
   const rect = source.getBoundingClientRect();
   const centerX = rect.left + rect.width / 2;
   const centerY = rect.top + rect.height / 2;
 
-  for (let index = 0; index < amount; index += 1) {
+  for (let index = 0; index < count; index += 1) {
     const particle = document.createElement("span");
     const angle = (Math.PI * 2 * index) / amount + Math.random() * 0.45;
     const distance = 48 + Math.random() * 58;
@@ -367,6 +372,7 @@ function setupMedal() {
     resetColoring();
     resetCatch();
     resetBuild();
+    initMemoryGame();
   });
 }
 
@@ -727,6 +733,114 @@ function resetBuild() {
   if (celebration) celebration.classList.remove("show");
 }
 
+// ===== MEMORY GAME =====
+const memoryEmojis = ["🦷", "🧚", "⭐", "💖", "🌸", "🦋", "🌈", "💎"];
+
+function setupMemory() {
+  const grid = $("#memoryGrid");
+  if (!grid) return;
+
+  initMemoryGame();
+
+  const restartBtn = $("#memoryRestart");
+  if (restartBtn) {
+    restartBtn.addEventListener("click", initMemoryGame);
+  }
+}
+
+function initMemoryGame() {
+  const grid = $("#memoryGrid");
+  if (!grid) return;
+
+  state.memory = {
+    flipped: [],
+    matched: new Set(),
+    moves: 0,
+    locked: false,
+  };
+
+  grid.innerHTML = "";
+  $("#memoryMoves").textContent = "0";
+  $("#memoryPairs").textContent = "0";
+  $("#memoryWin").classList.remove("show");
+
+  const cards = [...memoryEmojis, ...memoryEmojis];
+  shuffleArray(cards);
+
+  cards.forEach((emoji, index) => {
+    const card = document.createElement("div");
+    card.className = "memory-card";
+    card.dataset.emoji = emoji;
+    card.dataset.index = index;
+
+    card.innerHTML = `
+      <div class="memory-card-inner">
+        <div class="memory-card-front">✦</div>
+        <div class="memory-card-back">${emoji}</div>
+      </div>
+    `;
+
+    card.addEventListener("click", () => flipMemoryCard(card));
+    grid.appendChild(card);
+  });
+}
+
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+
+function flipMemoryCard(card) {
+  const mem = state.memory;
+  if (!mem || mem.locked) return;
+  if (card.classList.contains("flipped") || card.classList.contains("matched")) return;
+
+  card.classList.add("flipped");
+  mem.flipped.push(card);
+
+  if (mem.flipped.length === 2) {
+    mem.moves++;
+    $("#memoryMoves").textContent = mem.moves;
+    mem.locked = true;
+
+    const [first, second] = mem.flipped;
+
+    if (first.dataset.emoji === second.dataset.emoji) {
+      setTimeout(() => {
+        first.classList.add("matched");
+        second.classList.add("matched");
+        mem.matched.add(first.dataset.emoji);
+        $("#memoryPairs").textContent = mem.matched.size;
+        createBurst(first, ["⭐", "✨", "💖"], 8);
+        createBurst(second, ["⭐", "✨", "💖"], 8);
+        mem.flipped = [];
+        mem.locked = false;
+
+        if (mem.matched.size === memoryEmojis.length) {
+          setTimeout(() => {
+            $("#memoryWin").classList.add("show");
+            showToast("Все парочки найдены!");
+            createSparkles(50);
+          }, 400);
+        }
+      }, 380);
+    } else {
+      setTimeout(() => {
+        first.classList.add("shake");
+        second.classList.add("shake");
+        setTimeout(() => {
+          first.classList.remove("flipped", "shake");
+          second.classList.remove("flipped", "shake");
+          mem.flipped = [];
+          mem.locked = false;
+        }, 440);
+      }, 600);
+    }
+  }
+}
+
 function boot() {
   setupPhotoFallback();
   setupReveal();
@@ -741,6 +855,7 @@ function boot() {
   setupCatch();
   setupMusic();
   setupBuild();
+  setupMemory();
   updateStory();
   updateMood();
 }
