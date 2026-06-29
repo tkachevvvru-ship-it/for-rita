@@ -472,7 +472,7 @@ function spawnCatchItems() {
   item.className = "catch-item";
   item.textContent = catchEmojis[Math.floor(Math.random() * catchEmojis.length)];
   item.style.left = `${10 + Math.random() * 80}%`;
-  item.style.animationDuration = `${2.5 + Math.random() * 2}s`;
+  item.style.animationDuration = `${5 + Math.random() * 3}s`;
   item.style.fontSize = `${28 + Math.random() * 20}px`;
 
   field.appendChild(item);

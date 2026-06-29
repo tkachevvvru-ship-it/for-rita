@@ -1853,7 +1853,7 @@ h3 {
   font-size: 36px;
   cursor: pointer;
   pointer-events: auto;
-  animation: starFall 3.5s linear forwards;
+  animation: starFall 6s linear forwards;
   transition: transform 150ms ease;
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
 }
